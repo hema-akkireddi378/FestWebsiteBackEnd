@@ -1,14 +1,12 @@
-# Use Java 21 base image
-FROM openjdk:21-jdk-slim
-
-# Set working directory inside container
+# Stage 1: Build the Spring Boot JAR using Maven
+FROM maven:3.9.6-eclipse-temurin-21-alpine AS build
 WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
 
-# Copy the JAR file into container
-COPY target/festwebsite-0.0.1-SNAPSHOT.jar app.jar
-
-# Expose port used by Spring Boot
+# Stage 2: Run the built JAR
+FROM openjdk:21-jdk-slim
+WORKDIR /app
+COPY --from=build /app/target/festwebsite-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8081
-
-# Command to run your Spring Boot app
 ENTRYPOINT ["java", "-jar", "app.jar"]
