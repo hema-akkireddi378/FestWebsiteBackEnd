@@ -1,14 +1,14 @@
-# Use Java 21
+# Use Java 21 base image
 FROM openjdk:21-jdk-slim
 
-# Working directory inside container
+# Set working directory inside container
 WORKDIR /app
 
-# Copy the JAR file
+# Copy the JAR file into container
 COPY target/festwebsite-0.0.1-SNAPSHOT.jar app.jar
 
-# Expose backend port
+# Expose port used by Spring Boot
 EXPOSE 8081
 
-# Run the Spring Boot app
+# Command to run your Spring Boot app
 ENTRYPOINT ["java", "-jar", "app.jar"]
